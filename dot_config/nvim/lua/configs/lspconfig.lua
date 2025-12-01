@@ -1,0 +1,2 @@
+-- This file is not needed with LazyVim - LSP config is handled in lua/plugins/
+-- LazyVim automatically configures lspconfig

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(nvim:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "/home/jbgreene/.local/share/nvim/lazy"
+    ]
+  }
+}

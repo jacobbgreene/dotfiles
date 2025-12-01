@@ -8,11 +8,14 @@ return {
   { "mhartington/oceanic-next" },
   { "vague2k/vague.nvim" },
   { "catppuccin/nvim", name = "catppuccin" },
+  { "morhetz/gruvbox"},
+  {"vague-theme/vague"},
+  { "bluz71/vim-moonfly-colors", name = "moonfly"},
 
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "nightfox",
+      colorscheme = "moonfly",
     },
   },
 }
