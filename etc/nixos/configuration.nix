@@ -4,11 +4,26 @@
 
 { config, pkgs, lib, ... }:
 
+let
+  # This pulls in the unstable channel 
+  unstable = import <nixpkgs-unstable> { config = { allowUnfree = true; }; };
+in
+
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+
+  # Auto-login so I can use ambxst lock
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "jbgreene";
+
+  # Disabling suspend 
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -83,6 +98,11 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
     #  thunderbird
+    (wineWowPackages.full.override {
+     wineRelease = "staging";
+     mingwSupport = true;
+   })
+   winetricks
     ];
   };
 
@@ -110,6 +130,11 @@
     dedicatedServer.openFirewall = true; 
   };
 
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk24;
+  };
+  
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
@@ -164,6 +189,7 @@
   networking.firewall.allowedTCPPorts = [ 57621 ];
   networking.firewall.allowedUDPPorts = [ 5353 ];
 
+ 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -199,7 +225,16 @@
   cava
   xclip
   thefuck
-
+  clifm
+  librewolf
+  unstable.gemini-cli-bin
+  wowup-cf
+  zed-editor
+  revolt-desktop
+  unstable.stoat-desktop
+  protonvpn-gui
+  wireguard-tools
+    
   #Required for neovim
   git
   ripgrep
@@ -207,9 +242,16 @@
   unzip
   nodejs_22
   rustup
+  rust-analyzer
+  pkg-config
+  openssl
+  gcc
+  binutils
   gnumake
   openssl
+  glibc.dev
   discord
+  winetricks
 
   # Required for Treesitter
   gcc
@@ -263,7 +305,12 @@
   kitty
   ];
 
+  environment.variables = {
+  GEMINI_MODEL = "gemini-3-pro-preview";
+  };
+
   # Add $HOME/.cargo/bin to PATH for all users' interactive shells
+  # 
   environment.interactiveShellInit = ''
     export PATH="$HOME/.cargo/bin:$PATH"
   '';
